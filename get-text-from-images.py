@@ -51,13 +51,14 @@ for page in pdf_file:
     x, y, w, h = cv2.boundingRect(largest_contour)
     cropped_image = original_image[y : y + h, x : x + w]
 
-    # resize to width=600
-    scale_factor = 1500.0 / cropped_image.shape[1]
+    # resize to width=900
+    scale_factor = 900.0 / cropped_image.shape[1]
     cropped_image = cv2.resize(cropped_image, (0, 0), fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LANCZOS4)
 
     mask = cv2.threshold(cropped_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
     height, width = mask.shape[:2]
+
     horizontal_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (width // 2, 1))
     horizontal_kernel2 = cv2.getStructuringElement(cv2.MORPH_RECT, (width // 2, 3))
     horizontal_mask = cv2.erode(mask, horizontal_kernel)
@@ -70,8 +71,6 @@ for page in pdf_file:
 
     hor_ver_mask = cv2.bitwise_or(horizontal_mask, vertical_mask)
     cropped_image[np.nonzero(hor_ver_mask)] = 255
-
-    mask = cv2.threshold(cropped_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
 
     text = pytesseract.image_to_string(mask, config="--psm 3").replace('\n\n', '\n')
 
