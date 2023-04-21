@@ -10,11 +10,6 @@ pytesseract.pytesseract.tesseract_cmd = 'C://Program Files//Tesseract-OCR//tesse
 file = 'C://Users//heito//Downloads//28 Dec 2022, 4_25_48 AM.pdf'
 
 pdf_file = fitz.open(file)
-  
-for page_index in range(len(pdf_file)):
-  
-    page = pdf_file[page_index]
-    image_list = page.get_images()
 
 for page in pdf_file:
     pix = page.get_pixmap(matrix=fitz.Identity, dpi=None,
